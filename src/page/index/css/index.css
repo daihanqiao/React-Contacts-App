@@ -1,0 +1,15 @@
+/*
+* @Author: {daihanqiao}
+* @Date:   2015-12-25 17:44:47
+* @Last Modified by:   Administrator
+* @Last Modified time: 2016-01-02 12:14:01
+*/
+.am-accordion-gapped{
+	margin: 5px 5px;
+}
+.am-accordion-content{
+	padding:0px;
+}
+dt + dd{
+	margin-top: 0;
+}

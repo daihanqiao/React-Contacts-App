@@ -1,0 +1,40 @@
+{
+  "name": "react-contacts-app",
+  "version": "1.0.0",
+  "description": "基于react的通讯录APP，使用webpack打包项目",
+  "main": "webpack.config.js",
+  "dependencies": {},
+  "devDependencies": {
+    "amazeui-react": "^1.0.0-beta2",
+    "css-loader": "^0.23.1",
+    "extract-text-webpack-plugin": "^0.9.1",
+    "fastclick": "^1.0.6",
+    "file-loader": "^0.8.5",
+    "js-sha1": "^0.3.0",
+    "jsx-loader": "^0.13.2",
+    "lodash": "^3.10.1",
+    "react": "^0.14.3",
+    "react-dom": "^0.14.3",
+    "reqwest": "^2.0.5",
+    "style-loader": "^0.13.0",
+    "url-loader": "^0.5.7",
+    "webpack": "^1.12.9"
+  },
+  "scripts": {
+    "dev": "set NODE_ENV=dev&webpack --progress --colors&node .\\bin\\webpackAfter.js",
+    "release": "set NODE_ENV=release&webpack -p --progress --colors&node .\\bin\\webpackAfter.js",
+    "watch": "npm run dev&node .\\bin\\webpackAfter.js&webpack -w",
+    "release-gzip": "set NODE_ENV=release&set NODE_GZIP=1&webpack -p --progress --colors&node .\\bin\\webpackAfter.js",
+    "release-app": "set NODE_ENV=release&set NODE_APP=1&webpack -p --progress --colors&node .\\bin\\webpackAfter.js",
+    "test": "node .\\bin\\test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/daihanqiao/React-Contacts"
+  },
+  "keywords": [
+    "react webpack contacts"
+  ],
+  "author": "daihanqiao@126.com",
+  "license": "ISC"
+}

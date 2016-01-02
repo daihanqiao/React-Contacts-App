@@ -1,0 +1,27 @@
+/*
+* @Author: Administrator
+* @Date:   2015-12-27 00:24:30
+* @Last Modified by:   Administrator
+* @Last Modified time: 2016-01-02 12:13:37
+*/
+.memberItem{
+	margin-left:20px;
+	padding:5px 0px;
+	position: relative;
+}
+.am-accordion-content .memberItem:not(:last-child){
+	border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+.memberName{
+	font-size: 15px;
+}
+.memberMobile{
+	font-size: 12px;
+	color: #999;
+}
+.memberItem-icon{
+	position: absolute;
+	right: 16px;
+	top: 3px;
+	font-size: 30px;
+}
