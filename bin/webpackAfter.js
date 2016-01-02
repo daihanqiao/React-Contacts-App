@@ -2,7 +2,7 @@
 * @Author: {daihanqiao}
 * @Date:   2015-12-15 10:09:36
 * @Last Modified by:   {daihanqiao}
-* @Last Modified time: 2016-01-02 11:19:26
+* @Last Modified time: 2016-01-02 16:19:35
 * webpack完成后，打包html,并插入公共js,css以及页面js,css文件引入，对js进行gzip，将资源文件放入res目录
 */
 
@@ -41,10 +41,7 @@ function insStrBeforeIndex(oldStr,specifyStr,insStr,fileName){
 //生成输出目录和输出目录下html目录
 mkdirSync(getPath(outputDir));
 mkdirSync(getPath(outputDir + '/html/'));
-mkdirSync(getPath(outputDir + '/res/'));
 
-var dirList = ['/css','/js','/lib','/res','/html'];
-var dirListLen = dirList.length;
 //输出目录下所有js,css文件列表
 function getFileList(path){
     var fileNameList = [];//不带路径文件名
@@ -52,36 +49,20 @@ function getFileList(path){
         files = fs.readdirSync(path);
         files.forEach(function(item) {
             var tmpPath = path + '/' + item;
-            //是否需要移动到res目录
-            var isNeedMove = true;
-            for(var i = 0;i<dirListLen;i++){
-                if(tmpPath.indexOf(dirList[i]) != -1){
-                    isNeedMove = false;
-                }
-            }
-            if(isNeedMove){
-                //将资源文件移入res目录
-                var exec = require('child_process').exec;
-                var newPath = tmpPath.replace(new RegExp(outputDir) , outputDir + '/res');
-                var child_process = exec('mv -f '+ tmpPath + ' ' + newPath,function(err,out) {
-                    console.log(out); err && console.log(err);
-                });
-            }else{
-                var stats = fs.statSync(tmpPath);
-                if (stats.isDirectory()) {
-                    walk(tmpPath,fileNameList);
-                } else {
-                    var fileName =tmpPath.split('/').pop();
-                    //css开启gzip测试浏览器解析不成功
-                    if(isOpenGzip && stats.size >= GZIP_SIZE && fileName.indexOf('.css') === -1){
-                        var gzip = zlib.createGzip();
-                        var inp = fs.createReadStream(tmpPath);
-                        var out = fs.createWriteStream(tmpPath+'.gz');
-                        inp.pipe(gzip).pipe(out);
-                        fileNameList.push(fileName + '.gz');
-                    }else{
-                        fileNameList.push(fileName);
-                    }
+            var stats = fs.statSync(tmpPath);
+            if (stats.isDirectory()) {
+                walk(tmpPath,fileNameList);
+            } else {
+                var fileName =tmpPath.split('/').pop();
+                //css开启gzip测试浏览器解析不成功
+                if(isOpenGzip && stats.size >= GZIP_SIZE && fileName.indexOf('.css') === -1){
+                    var gzip = zlib.createGzip();
+                    var inp = fs.createReadStream(tmpPath);
+                    var out = fs.createWriteStream(tmpPath+'.gz');
+                    inp.pipe(gzip).pipe(out);
+                    fileNameList.push(fileName + '.gz');
+                }else{
+                    fileNameList.push(fileName);
                 }
             }
         });

@@ -2,7 +2,7 @@
 * @Author: daihanqiao
 * @Date:   2015-12-08 19:59:14
 * @Last Modified by:   daihanqiao
-* @Last Modified time: 2016-01-02 12:10:59
+* @Last Modified time: 2016-01-02 16:41:24
 * webpack配置文件
 */
 var webpack = require('webpack');
@@ -84,10 +84,13 @@ console.log('alias:' , aliasList);
 console.log('----------------------------------------------');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
-var outputName = (isRelease && !isApp) ? 'js/[name].[hash:8].js' :'js/[name].js';
-var extractTextName = (isRelease && !isApp) ? 'css/[name].[hash:8].css' : 'css/[name].css';
+var needHash = (isRelease && !isApp);
+var outputName = needHash ? 'js/[name].[hash:8].js' :'js/[name].js';
+var extractTextName = needHash ? 'css/[name].[hash:8].css' : 'css/[name].css';
+var imageLoader = needHash ? 'url-loader?name=images/[name].[hash:8].[ext]&limit=8192' : 'url-loader?name=images/[name].[ext]&limit=8192';
+var fontLoader = needHash ? 'url?name=fonts/[name].[hash:8].[ext]&prefix=font/&limit=10000' : 'url?name=fonts/[name].[ext]&prefix=font/&limit=10000'
+//公共库别名
 var commonJsName = isApp ? 'common.app' : 'common';
-
 //ready函数
 var readyFun = isApp ? function(){window['apiready'] = function(){ready();}} : function(){ready();};
 
@@ -118,21 +121,18 @@ module.exports = {
     //入口文件输出配置
     output: {
         path: getPath(outputDir),
-        publicPath: '../res/',//资源文件路径，包括字体，按需加载模块等
+        publicPath: '../',//资源文件路径，包括字体，按需加载模块等
         filename: outputName
     },
     module: {
         //加载器配置
         loaders: [
-            {test:/\.css$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader")},
+            { test:/\.css$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader")},
             { test: /\.js$/, loader: 'jsx-loader?harmony' },
-            { test: /\.(png|jpg)$/, loader: 'url-loader?limit=8192'},
-            {
-               test   : /\.woff|\.woff2|\.svg|.eot|.otf|\.ttf/,
-               loader : 'url?prefix=font/&limit=10000'
-            }
+            { test: /\.(png|jpg)$/, loader: imageLoader},
+            { test   : /\.woff|\.woff2|\.svg|.eot|.otf|\.ttf/, loader : fontLoader},
         ],
-        noParse: ['*.woff','*.woff2','*.ttf','*.eot','*.svg'] //不解析某文件，例如压缩后的react.min.js，和输出无关
+        noParse: [] //不解析某文件，例如压缩后的react.min.js，和输出无关
     },
     // devtool: "source-map",
     //插件项
