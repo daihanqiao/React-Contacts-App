@@ -2,7 +2,7 @@
 * @Author: {daihanqiao}
 * @Date:   2015-12-15 10:09:36
 * @Last Modified by:   {daihanqiao}
-* @Last Modified time: 2016-01-02 16:19:35
+* @Last Modified time: 2016-01-03 18:13:12
 * webpack完成后，打包html,并插入公共js,css以及页面js,css文件引入，对js进行gzip，将资源文件放入res目录
 */
 
@@ -20,7 +20,7 @@ var getPath = function(url) {
 };
 var outputDir = process.env.NODE_ENV === 'release' ? 'release' : 'dev';
 var isApp = (parseInt(process.env.NODE_APP) === 1);
-isApp && (outputDir = 'releaseApp');
+isApp && (outputDir = 'release_app');
 //生成目录
 function mkdirSync(path){
     if(!fs.existsSync(getPath(path))){

@@ -2,7 +2,7 @@
 * @Author: daihanqiao
 * @Date:   2015-12-08 19:59:14
 * @Last Modified by:   daihanqiao
-* @Last Modified time: 2016-01-02 16:41:24
+* @Last Modified time: 2016-01-03 18:34:57
 * webpack配置文件
 */
 var webpack = require('webpack');
@@ -17,7 +17,7 @@ var isApp = (parseInt(process.env.NODE_APP) === 1);
 //根据环境变量配置输出目录
 var isRelease = (process.env.NODE_ENV === 'release');
 var outputDir = isRelease ? 'release' : 'dev';
-isApp && (outputDir = 'releaseApp');
+isApp && (outputDir = 'release_app');
 //发布版做相应设置
 if(isRelease){
     //删除release目录
@@ -30,6 +30,8 @@ if(isRelease){
 }
 //根据fileType获取文件别名列表和不带后缀的文件名列表
 var aliasTypeList = ['js','css'];
+//图片类型文件
+var imageTypeList=["jpg","gif","jpeg","png",'bmp'];
 function getFileList(path){
     var fileAliasList = {};//文件别名{'alis':fullPath}
     var entryAliasList = {};//入口程序别名
@@ -56,6 +58,7 @@ function getFileList(path){
                     entryNameList.push(fileName);
                 }else{
                     fileType === 'css' && (fileName = fileName + 'Css');
+                    (imageTypeList.indexOf(fileType) !== -1) && (fileName = fileName + 'Img');
                     fileAliasList[fileName] = getPath(tmpPath);
                 }
             }
@@ -140,7 +143,7 @@ module.exports = {
     //其它解决方案配置
     resolve: {
         // root: './', //绝对路径
-        extensions: ['', '.js', '.json', '.scss', '.css'],
+        extensions: ['', '.js', '.json', '.scss', '.css', "jpg"," gif", "jpeg", "png", 'bmp'],
         alias: aliasList
     }
 };
