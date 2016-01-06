@@ -25,8 +25,7 @@
     "release": "set NODE_ENV=release&webpack -p --progress --colors&node .\\bin\\webpackAfter.js",
     "watch": "npm run dev&node .\\bin\\webpackAfter.js&webpack -w",
     "release-gzip": "set NODE_ENV=release&set NODE_GZIP=1&webpack -p --progress --colors&node .\\bin\\webpackAfter.js",
-    "release-app": "set NODE_ENV=release&set NODE_APP=1&webpack -p --progress --colors&node .\\bin\\webpackAfter.js",
-    "test": "node .\\bin\\test.js"
+    "release-app": "set NODE_ENV=release&set NODE_APP=1&webpack -p --progress --colors&node .\\bin\\webpackAfter.js"
   },
   "repository": {
     "type": "git",

@@ -2,7 +2,7 @@
 * @Author: daihanqiao
 * @Date:   2015-12-08 19:59:14
 * @Last Modified by:   daihanqiao
-* @Last Modified time: 2016-01-03 18:34:57
+* @Last Modified time: 2016-01-06 13:36:25
 * webpack配置文件
 */
 var webpack = require('webpack');
@@ -91,7 +91,7 @@ var needHash = (isRelease && !isApp);
 var outputName = needHash ? 'js/[name].[hash:8].js' :'js/[name].js';
 var extractTextName = needHash ? 'css/[name].[hash:8].css' : 'css/[name].css';
 var imageLoader = needHash ? 'url-loader?name=images/[name].[hash:8].[ext]&limit=8192' : 'url-loader?name=images/[name].[ext]&limit=8192';
-var fontLoader = needHash ? 'url?name=fonts/[name].[hash:8].[ext]&prefix=font/&limit=10000' : 'url?name=fonts/[name].[ext]&prefix=font/&limit=10000'
+var fontLoader = needHash ? 'url?name=fonts/[name].[hash:8].[ext]&prefix=font/&limit=10000' : 'url?name=fonts/[name].[ext]&prefix=font/&limit=10000';
 //公共库别名
 var commonJsName = isApp ? 'common.app' : 'common';
 //ready函数

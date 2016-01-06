@@ -1,5 +1,5 @@
 ##项目简介
-    react版通讯录App,使用webpack打包。
+    使用react实现的通讯录App,基于ApiCloud,使用webpack打包。
 
 ##环境配置
 * 安装最新版本nodejs
@@ -22,7 +22,7 @@
 * `images`:图片图标相关文件输出目录
 
 ##约定
-* 同类型的文件不可重名(图片算同一类型)。
+* 同类型的文件不可重名(所有格式图片算同一类型)。
 * 入口js文件命名需拼接`.entry.`,例如`index.entry.js`
 * `src/page`目录下的html文件不需要引入common.js,common.css以及相应的页面js,css，`webpackAfter.js`会完成相关处理
 * js,css文件的引入规则为：js直接require文件名，如：`require('index')`;css需require文件名+Css，如：`require('indexCss')`;图片需require文件名+Img，如`require('indexImg')`

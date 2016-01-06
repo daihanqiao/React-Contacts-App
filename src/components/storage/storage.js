@@ -2,16 +2,14 @@
  * @Author: {daihanqiao}
  * @Date:   2015-12-25 16:40:55
  * @Last Modified by:   {daihanqiao}
- * @Last Modified time: 2015-12-25 17:07:34
+ * @Last Modified time: 2016-01-06 11:17:34
  */
 
 (function() {
 	"use strict";
 
-	function storage() {
-		var localStorage = window.localStorage;
-
-		function set(key, value) {
+	var storage = {
+		set:function(key, value) {
 			var v = value;
 			if(typeof v === 'object'){
 			    v = JSON.stringify(v);
@@ -19,10 +17,8 @@
 			}else{
 			    v = 'str-'+ v;
 			}
-			localStorage.setItem(key, v);
-		}
-
-		function get(key) {
+		},
+		get:function(key) {
 		    var v = localStorage.getItem(key);
 		    if(!v){return null;}
 			if(v.indexOf('obj-') === 0){
@@ -31,31 +27,23 @@
 		    }else{
 		        return v.slice(4);
 		    }
-		}
-
-		function remove(key) {
+		},
+		remove:function(key) {
 			localStorage.removeItem(key);
-		}
+		},
 
-		function clear(){
+		clear:function(){
 			localStorage.clear();
 		}
-
-		return {
-			set: set,
-			get: get,
-			remove: remove,
-			clear: clear
-		};
-	}
+	};
 
 	if (typeof define === 'function' && typeof define.amd === 'object' && define.amd) {
 		define(function() {
-			return storage();
+			return storage;
 		});
 	} else if (typeof module !== 'undefined' && module.exports) {
-		module.exports = storage();
+		module.exports = storage;
 	} else {
-		window.storage = storage();
+		window.Storage = storage;
 	}
 }());
