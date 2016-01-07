@@ -2,7 +2,7 @@
  * @Author: {daihanqiao}
  * @Date:   2015-12-23 15:25:18
  * @Last Modified by:   {daihanqiao}
- * @Last Modified time: 2016-01-07 11:59:47
+ * @Last Modified time: 2016-01-07 16:03:04
  */
 
 'use strict';
@@ -24,6 +24,9 @@ function ready() {
 	require('indexCss');
 	var Loader = require('loader');
 	var MemberItem = require('memberItem');
+
+	var Common = require(__COMMON__);
+	Common.setIos7Bar("#appCon");
 
 	//将用户按部门分类
 	function setMemberData(memberList, departmentList) {
@@ -57,7 +60,7 @@ function ready() {
 		function ajax(urlPath, succCallBack, param, method) {
 			method = method || "GET";
 			Reqwest({
-				url: "https://d.apicloud.com/mcm/api/" + urlPath,
+				url: "https://d.apicloud.com/mcm/api/" + urlPath + '?filter=' + encodeURIComponent(JSON.stringify({limit:500})),
 				method: method,
 				data: param,
 				dataType: 'json',
