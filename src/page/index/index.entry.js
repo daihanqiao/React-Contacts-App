@@ -2,13 +2,11 @@
  * @Author: {daihanqiao}
  * @Date:   2015-12-23 15:25:18
  * @Last Modified by:   {daihanqiao}
- * @Last Modified time: 2016-01-02 13:27:04
+ * @Last Modified time: 2016-01-07 11:59:47
  */
 
 'use strict';
 function ready() {
-	var React = require('react');
-	var ReactDOM = require('react-dom');
 	var ReactDomServer  = require('react-dom/server');
 	var Reqwest = require('reqwest');
 	var Sha1 = require('js-sha1');

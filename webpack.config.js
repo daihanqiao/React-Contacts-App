@@ -2,7 +2,7 @@
 * @Author: daihanqiao
 * @Date:   2015-12-08 19:59:14
 * @Last Modified by:   daihanqiao
-* @Last Modified time: 2016-01-06 13:36:25
+* @Last Modified time: 2016-01-07 11:58:57
 * webpack配置文件
 */
 var webpack = require('webpack');
@@ -111,10 +111,10 @@ var plugins = [
         __READY__:readyFun,
         __COMMON__:JSON.stringify(commonJsName),
     }),
-    // new webpack.ProvidePlugin({     //开启后js文件中不需要手动require:react,react-dom
-    //     React: 'react',
-    //     ReactDOM: 'react-dom',
-    // }),
+    new webpack.ProvidePlugin({     //开启后js文件中不需要手动require:react,react-dom
+        React: 'react',
+        ReactDOM: 'react-dom',
+    }),
 ];
 
 //webpack配置

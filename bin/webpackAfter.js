@@ -2,7 +2,7 @@
 * @Author: {daihanqiao}
 * @Date:   2015-12-15 10:09:36
 * @Last Modified by:   {daihanqiao}
-* @Last Modified time: 2016-01-03 18:13:12
+* @Last Modified time: 2016-01-06 13:49:31
 * webpack完成后，打包html,并插入公共js,css以及页面js,css文件引入，对js进行gzip，将资源文件放入res目录
 */
 

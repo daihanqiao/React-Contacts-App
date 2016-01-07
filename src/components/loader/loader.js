@@ -2,11 +2,10 @@
 * @Author: daihanqiao
 * @Date:   2015-12-05 23:12:33
 * @Last Modified by:   daihanqiao
-* @Last Modified time: 2015-12-19 14:09:55
+* @Last Modified time: 2016-01-07 12:00:48
 */
+
 'use strict';
-var React = require('react');
-var ReactDOM = require('react-dom');
 require("loaderCss");
 //组件
 var Loader = React.createClass({

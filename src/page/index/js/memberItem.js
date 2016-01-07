@@ -2,12 +2,10 @@
 * @Author: daihanqiao
 * @Date:   2015-12-27 00:20:47
 * @Last Modified by:   daihanqiao
-* @Last Modified time: 2016-01-06 13:31:28
+* @Last Modified time: 2016-01-07 12:00:49
 */
 
 'use strict';
-
-var React = require('react');
 var Common = require(__COMMON__);
 var Icon = require('amazeui-react/lib/Icon');
 require('memberItemCss');
