@@ -6,6 +6,7 @@
 */
 
 'use strict';
+var React = require('react');
 var Common = require(__COMMON__);
 var Icon = require('amazeui-react/lib/Icon');
 require('memberItemCss');
@@ -18,4 +19,4 @@ module.exports = React.createClass({
 						</div>;
 		return Common.setCallEl(memberItem,this.props.member_mobile);
 	}
-})
+});

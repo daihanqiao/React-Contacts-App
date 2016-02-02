@@ -6,6 +6,7 @@
 */
 
 "use strict";
+var React = require('react');
 module.exports = {
 	setIos7Bar: function(selector,type){
 		return false;

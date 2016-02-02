@@ -6,6 +6,8 @@
 */
 
 'use strict';
+var React = require('react');
+var ReactDOM = require('react-dom');
 require("loaderCss");
 //组件
 var Loader = React.createClass({
@@ -40,4 +42,4 @@ module.exports = {
 			ReactDOM.unmountComponentAtNode(loaderLayer);
 		}
 	}
-}
+};

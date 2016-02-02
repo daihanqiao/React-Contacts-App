@@ -5,8 +5,10 @@
 * @Last Modified time: 2016-01-07 11:58:57
 * webpack配置文件
 */
+'use strict';
 var webpack = require('webpack');
 var fs = require('fs');
+var walk = require('./bin/walk.js');
 var path = require('path');
 //生成绝对路径
 var getPath = function(url) {
@@ -18,13 +20,14 @@ var isApp = (parseInt(process.env.NODE_APP) === 1);
 var isRelease = (process.env.NODE_ENV === 'release');
 var outputDir = isRelease ? 'release' : 'dev';
 isApp && (outputDir = 'release_app');
+//dev模式下当前打包目录，不传则默认全部打包
+var curPageDir = JSON.parse(process.env.npm_config_argv).remain[0] || "";
 //发布版做相应设置
 if(isRelease){
     //删除release目录
     if(fs.existsSync(getPath(outputDir))){
-        var exec = require('child_process').exec;
-        var child_process = exec('rm -rf '+ outputDir,function(err,out) {
-            console.log(out); err && console.log(err);
+        walk(getPath(outputDir),function(tmpPath){
+            fs.unlinkSync(tmpPath);
         });
     }
 }
@@ -36,57 +39,41 @@ function getFileList(path){
     var fileAliasList = {};//文件别名{'alis':fullPath}
     var entryAliasList = {};//入口程序别名
     var entryNameList = [];//入口程序文件名
-    walk = function(path, fileAliasList,entryAliasList,entryNameList){
-        files = fs.readdirSync(path);
-        files.forEach(function(item) {
-            var tmpPath = path + '/' + item;
-            var stats = fs.statSync(tmpPath);
-            if (stats.isDirectory()) {
-                walk(tmpPath, fileAliasList,entryAliasList,entryNameList);
-            } else {
-                var fileType = tmpPath.split('.').pop().toLowerCase();
-                var fileName =tmpPath.split('/').pop().replace(/\.\w+$/,'');
-                if(aliasTypeList.indexOf(fileType) === -1){
-                    return false;
-                }
-                if(entryAliasList[fileName] || fileAliasList[fileName]){
-                    throw "出现重名文件：" + fileName;
-                }
-                //入口程序js
-                if(fileType === 'js' && fileName.indexOf('.entry') !== -1){
-                    entryAliasList[fileName] = getPath(tmpPath);
-                    entryNameList.push(fileName);
-                }else{
-                    fileType === 'css' && (fileName = fileName + 'Css');
-                    (imageTypeList.indexOf(fileType) !== -1) && (fileName = fileName + 'Img');
-                    fileAliasList[fileName] = getPath(tmpPath);
-                }
+    walk(path,function(tmpPath){
+        var fileType = tmpPath.split('.').pop().toLowerCase();
+        var fileName =tmpPath.split('/').pop().replace(/\.\w+$/,'');
+        if(aliasTypeList.indexOf(fileType) === -1 && imageTypeList.indexOf(fileType) === -1){
+            return false;
+        }
+        if(entryAliasList[fileName] || fileAliasList[fileName]){
+            throw "出现重名文件：" + fileName;
+        }
+        //入口程序js
+        if(fileType === 'js' && fileName.indexOf('.entry') !== -1){
+            if(!curPageDir || fileName === curPageDir+'.entry'){
+                entryAliasList[fileName] = getPath(tmpPath);
+                entryNameList.push(fileName);
             }
-        });
-    };
-    walk(path, fileAliasList,entryAliasList,entryNameList);
+        }else{
+            fileType === 'css' && (fileName = fileName + 'Css');
+            (imageTypeList.indexOf(fileType) !== -1) && (fileName = fileName + 'Img');
+            fileAliasList[fileName] = getPath(tmpPath);
+        }
+    });
     return {
             'aliasList':fileAliasList,
             'entryAliasList':entryAliasList,
             'entryNameList':entryNameList
         };
 }
-//所有资源别名(不包括入口程序)
+//所有文件别名(不包括入口程序和html)
 var aliasList = getFileList(getPath('src')).aliasList;
 //所有page目录下文件列表
 var pageFileList = getFileList(getPath('src/page'));
 //入口文件配置
 var entryAliasList = pageFileList.entryAliasList;
 var entryNameList = pageFileList.entryNameList;
-console.log('----------------------------------------------');
-console.log("entryAlias:" , entryAliasList);
-console.log('----------------------------------------------');
-console.log("entryName:" , entryNameList);
-console.log('----------------------------------------------');
-console.log('alias:' , aliasList);
-console.log('----------------------------------------------');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
-
 var needHash = (isRelease && !isApp);
 var outputName = needHash ? 'js/[name].[hash:8].js' :'js/[name].js';
 var extractTextName = needHash ? 'css/[name].[hash:8].css' : 'css/[name].css';
@@ -111,11 +98,20 @@ var plugins = [
         __READY__:readyFun,
         __COMMON__:JSON.stringify(commonJsName),
     }),
-    new webpack.ProvidePlugin({     //开启后js文件中不需要手动require:react,react-dom
-        React: 'react',
-        ReactDOM: 'react-dom',
-    }),
+    // new webpack.ProvidePlugin({     //开启后js文件中不需要手动require:react,react-dom
+    //     React: 'react',
+    //     ReactDOM: 'react-dom',
+    // }),
 ];
+if(isRelease){
+    plugins.push(
+        new webpack.optimize.UglifyJsPlugin({
+            compress: {
+                warnings: false
+            }
+        })
+    );
+}
 
 //webpack配置
 module.exports = {
@@ -132,7 +128,7 @@ module.exports = {
         loaders: [
             { test:/\.css$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader")},
             { test: /\.js$/, loader: 'jsx-loader?harmony' },
-            { test: /\.(png|jpg)$/, loader: imageLoader},
+            { test: /\.(png|jpg|gif)$/, loader: imageLoader},
             { test   : /\.woff|\.woff2|\.svg|.eot|.otf|\.ttf/, loader : fontLoader},
         ],
         noParse: [] //不解析某文件，例如压缩后的react.min.js，和输出无关

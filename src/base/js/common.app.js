@@ -6,9 +6,10 @@
 */
 
 "use strict";
+var React = require('react');
 function isIos7(){
     var strDM = api.systemType;
-    if (strDM == 'ios') {
+    if (strDM === 'ios') {
         var strSV = api.systemVersion;
         var numSV = parseInt(strSV,10);
         var fullScreen = api.fullScreen;
@@ -23,7 +24,7 @@ module.exports = {
     setIos7Bar: function(selector,type){
         type = type || 1;
         if(isIos7()){
-            if(type == 1){
+            if(type === 1){
                 document.querySelector(selector).style.paddingTop = '20px';
             }else{
                 document.querySelector(selector).style.marginTop = '20px';

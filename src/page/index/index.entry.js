@@ -7,9 +7,11 @@
 
 'use strict';
 function ready() {
+	var React = require('react');
+	var ReactDOM = require('react-dom');
 	var ReactDomServer  = require('react-dom/server');
-	var Reqwest = require('reqwest');
-	var Sha1 = require('js-sha1');
+	var reqwest = require('reqwest');
+	var sha1 = require('js-sha1');
 	var _ = {
 		now: require('lodash/date/now'),
 		map: require('lodash/collection/map')
@@ -54,12 +56,12 @@ function ready() {
 	//ajax请求
 	var request = function(urlPath, succCallBack, param, method) {
 		var now = _.now();
-		var appKey = Sha1("A6993663430779" + "UZ" + "99788B23-69C1-ECEA-DB4E-8186F7DBA764" + "UZ" + now) + "." + now;
+		var appKey = sha1("A6993663430779" + "UZ" + "99788B23-69C1-ECEA-DB4E-8186F7DBA764" + "UZ" + now) + "." + now;
 		var needUpVersion = true;
 
 		function ajax(urlPath, succCallBack, param, method) {
 			method = method || "GET";
-			Reqwest({
+			reqwest({
 				url: "https://d.apicloud.com/mcm/api/" + urlPath + '?filter=' + encodeURIComponent(JSON.stringify({limit:500})),
 				method: method,
 				data: param,
@@ -122,16 +124,16 @@ function ready() {
 				var memberElList = [];
 				_.map(memberList,function(memberItem){
 					memberElList.push(<MemberItem key={memberItem.id} member_name={memberItem.member_name} member_mobile={memberItem.member_mobile}></MemberItem>);
-				})
+				});
 				var MemberEl = React.createClass({
 					render:function(){
 						return <div>
 							{memberElList}
-						</div>
+						</div>;
 					}
-				})
+				});
 				data.push({title:item.department_name,content:ReactDomServer.renderToString(<MemberEl/>),reactEl:<MemberEl/>});
-			})
+			});
 			ReactDOM.render(
 				<Accordion data={data} theme='gapped' ></Accordion>,
 			document.getElementById('appCon'));
@@ -139,7 +141,7 @@ function ready() {
 			var contentEls = document.querySelectorAll('.am-accordion-content');
 			_.map(contentEls,function(item,index){
 				ReactDOM.render(data[index].reactEl,item);
-			})
+			});
 			Loader.hide();
 		}
 	}
