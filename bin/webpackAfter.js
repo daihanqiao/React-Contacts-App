@@ -21,6 +21,9 @@ var getPath = function(url) {
 };
 var isRelease = (process.env.NODE_ENV === 'release');
 var outputDir = isRelease ? 'release' : 'dev';
+//dev模式下当前打包目录，不传则默认全部打包
+var curPageDir = JSON.parse(process.env.npm_config_argv).remain[0] || "";
+isRelease && curPageDir = "";
 var isApp = (parseInt(process.env.NODE_APP) === 1);
 isApp && (outputDir = 'release_app');
 //生成目录
@@ -84,6 +87,9 @@ function genHtmlFiles(path){
         var fileType = tmpPath.split('.').pop();
         var fileName =tmpPath.split('/').pop().replace(/\.\w+$/,'');
         if(fileType !== 'html'){
+            return false;
+        }
+        if(curPageDir && curPageDir !== fileName){
             return false;
         }
         var data=fs.readFileSync(tmpPath,"utf-8");
